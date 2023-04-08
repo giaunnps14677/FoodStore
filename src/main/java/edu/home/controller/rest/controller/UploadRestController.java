@@ -27,11 +27,4 @@ public class UploadRestController {
         node.put("size", save.length());
         return node;
     }
-    @PostMapping(value = "firebase")
-    public Object upload(@RequestParam("file") MultipartFile multipartFile) {
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode node = mapper.createObjectNode();
-        node.put("name", storageService.upload(multipartFile));
-        return node;
-    }
 }

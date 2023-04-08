@@ -1,60 +1,52 @@
 package edu.home.service.impl;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.home.entity.Order;
-import edu.home.entity.OrderDetail;
-import edu.home.repository.OrderDetailRepository;
-import edu.home.repository.OrderRepository;
-import edu.home.service.CustomerPhoneAddressService;
-import edu.home.service.CustomerService;
-import edu.home.service.OrderService;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.stream.Collectors;
+import edu.home.entity.Order;
+import edu.home.repository.OrderRepository;
+import edu.home.service.OrderService;
 
 @Service
-public class OrderServiceImpl implements OrderService {
-    @Autowired
-    private OrderRepository dao;
-    @Autowired
-    private OrderDetailRepository detailRepository;
-    @Autowired
-    private CustomerService customerService;
-    @Autowired
-    private CustomerPhoneAddressService addressService;
-    @Autowired
-    private HttpServletRequest request;
+public class OrderServiceImpl implements OrderService{
+	@Autowired
+	OrderRepository dao;
+	
+	@Override
+	public List<Order> findAll() {
+		return dao.findAll();
+	}
 
-    @Override
-    public Order create(JsonNode orderJsonData) {
+	@Override
+	public Long findStatusById(Long id) {
+		return dao.findStatusById(id);
+	}
 
-        ObjectMapper mapper = new ObjectMapper();
+	@Override
+	public void updateStatusById(Long status, Long id) {
+		dao.updateStatusById(status, id);
+	}
 
-        Order order = mapper.convertValue(orderJsonData, Order.class);
-        order.setCustomer(customerService.findByEmailKey(request.getRemoteUser()));
-        dao.save(order);
+	@Override
+	public Order findById(Long id) {
+		return dao.findById(id).get();
+	}
 
-        TypeReference<List<OrderDetail>> type = new TypeReference<List<OrderDetail>>(){};
-        List<OrderDetail> details = mapper.convertValue(orderJsonData.get("orderDetails"), type)
-                .stream().peek(data -> data.setOrder(order)).collect(Collectors.toList());
-        detailRepository.saveAll(details);
+	@Override
+	public List<Order> findByPaymentmethodId(Long id) {
+		return dao.findByPaymentmethodId(id);
+	}
 
-        return order;
-    }
+	@Override
+	public List<Order> findByOrderDate(Date orderDate) {
+		return dao.findByOrderDate(orderDate);
+	}
 
-    @Override
-    public List<Order> findAllByCustomerEmail(String remoteUser) {
-        return dao.findAllByCustomerEmail(remoteUser);
-    }
-
-    @Override
-    public Order findById(Long id) {
-        return dao.findById(id).get();
-    }
+	@Override
+	public List<Order> findByShippedDate(Date shippedDate) {
+		return dao.findByShippedDate(shippedDate);
+	}
 }

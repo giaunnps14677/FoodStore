@@ -1,6 +1,8 @@
 package edu.home.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -12,8 +14,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="category_blog")
-@Setter @Getter
-@NoArgsConstructor @AllArgsConstructor
+@Data
 public class CategoryBlog implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

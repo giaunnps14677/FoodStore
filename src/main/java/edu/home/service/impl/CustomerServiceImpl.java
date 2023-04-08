@@ -9,8 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 public class CustomerServiceImpl implements CustomerService {
     @Autowired
@@ -34,10 +32,5 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer findByEmailKey(String email) {
         return dao.findByEmail(email);
     }
-
-	@Override
-	public List<Customer> findAll() {
-		return dao.findAll();
-	}
 }
 
